@@ -54,11 +54,10 @@ void mainmenu(struct blood *b, int n)
         printf("---------------------------------------------");    
         printf("\n1. Add a donor");
         printf("\n2. Display all donors");
-        printf("\n3. Delete a donor");
-        printf("\n4. Search a donor");
-        printf("\n5. Press 5 to exit");
+        printf("\n3. Search a donor");
+        printf("\n4. Press 4 to exit");
         printf("\n---------------------------------------------\n");        
-        printf("\nEnter your choice (1-5) : ");
+        printf("\nEnter your choice (1-4) : ");
         scanf("%d", &o);
         system("cls");
         switch (o)
@@ -68,14 +67,11 @@ void mainmenu(struct blood *b, int n)
                 break;
             case 2:
                 display(b, count); //count variale contains valid doner records
-                break;
+                break;          
             case 3:
-                delete(b, n);
-                break;            
-            case 4:
                 search(b, n);
                 break;
-            case 5:
+            case 4:
                 printf("\nThank you for using this Application\n\n");
                 exit(0);
             default:
