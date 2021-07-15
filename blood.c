@@ -16,8 +16,6 @@ struct blood
 void mainmenu(struct blood *, int);
 void insert(struct blood *, int);
 void display(struct blood *, int);
-void delete(struct blood *, int);
-void delete_fn(struct blood *b, int n);
 void search(struct blood *, int);
 void search_blood_type(struct blood *, int);
 void search_name(struct blood *, int);
@@ -125,43 +123,7 @@ void search(struct blood *b, int n)
     }
 }
 
-void delete(struct blood *b, int n)
-{
-    int del;
-    while (1)
-    {
-        system("cls");
-        printf("---------------------------------------------\n");
-        printf("\t\tDelete Menu\n");
-        printf("---------------------------------------------");    
-        printf("\n1. Delete by name");
-        printf("\n2. Delete by blood type");
-        printf("\n3. Delete by sex");
-        printf("\n4. Press 4 to return to main menu");
-        printf("\n---------------------------------------------\n");        
-        printf("\nEnter your choice (1-4) : ");
-        scanf("%d", &del);
-        system("cls");
-        switch (del)
-        {
-        case 1:
-            delete_fn(b, count);
-            break;
-        case 2:
-            delete_fn(b, count); 
-            break;
-        case 3:
-            delete_fn(b, count);
-            break;
-        case 4:
-            mainmenu(b,n);
-            exit(0);
-        default:
-            printf("Enter value from 1 to 4\n\n");
-            break;
-        } 
-    }
-}
+
 
 //Function definition for donor input
 void insert(struct blood *b, int n)
@@ -218,13 +180,6 @@ void display(struct blood *b, int n)
     }
     getchar();
     getchar();    
-}
-
-void delete_fn(struct blood *b, int n)
-{
-    printf("Very sad times");
-    getchar();
-    getchar();
 }
 
 //Function definition to search for specific blood type
