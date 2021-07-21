@@ -11,6 +11,7 @@ struct blood
     char add[150];
     int age;
     int weight;
+    int phone;
 };
 
 void mainmenu(struct blood *, int);
@@ -20,7 +21,7 @@ void search(struct blood *, int);
 void search_blood_type(struct blood *, int);
 void search_name(struct blood *, int);
 void search_sex(struct blood *, int);
-void search_sex(struct blood *, int);
+void delete(struct blood *, int);
 void clr_file();
 
 static int count=0; 
@@ -58,12 +59,12 @@ void mainmenu(struct blood *b, int n)
         printf("\n1. Add a donor");
         printf("\n2. Display all donors");
         printf("\n3. Search a donor");
-        printf("\n4. RESET");
-        printf("\n5. Press 5 to exit");
+        printf("\n4. Delete a donor");
+        printf("\n5. RESET");
+        printf("\n6. Press 6 to exit");
         printf("\n---------------------------------------------\n");        
-        printf("\nEnter your choice (1-4) : ");
+        printf("\nEnter your choice (1-6) : ");
         scanf("%d", &o);
-        system("cls");
         switch (o)
         {
             case 1:
@@ -76,13 +77,16 @@ void mainmenu(struct blood *b, int n)
                 search(b, n);
                 break;
             case 4:
-                clr_file();
+                delete(b, n);
                 break;
             case 5:
+                clr_file();
+                break;
+            case 6:
                 printf("\nThank you for using this Application\n\n");
                 exit(0);
             default:
-                printf("Enter value from 1 to 5\n\n");
+                printf("Enter value from 1 to 6\n\n");
                 break;   
         }
     }
@@ -100,19 +104,19 @@ void search(struct blood *b, int n)
         printf("---------------------------------------------");    
         printf("\n1. Search by blood type");
         printf("\n2. Search by name");
-        printf("\n3. Search by sex");
-        printf("\n4. Press 4 to return to main menu");
+        printf("\n3. Search by mobile no.");
+        printf("\n4. Search by sex");
+        printf("\n5. Press 5 to return to main menu");
         printf("\n---------------------------------------------\n");        
-        printf("\nEnter your choice (1-4) : ");
+        printf("\nEnter your choice (1-5) : ");
         scanf("%d", &a);
-        system("cls");
         switch (a)
         {
             case 1:
                 search_blood_type(b, count);
                 break;
             case 2:
-                search_name(b, count); //Replace n with count variale as it contains valid doner records
+                search_name(b, count); 
                 break;
             case 3:
                 search_sex(b, count);
@@ -131,6 +135,7 @@ void search(struct blood *b, int n)
 void insert(struct blood *b, int n)
 {
     FILE *fp = fopen("bloodrecords.txt", "a+"); 
+    system("cls");
     for(i=0;i<n;i++)      
     {
         printf("\n---------------------------------------------");
@@ -152,12 +157,14 @@ void insert(struct blood *b, int n)
             printf("\n---------------------------------------------");
             printf("\nEnter your name\t\t: ");
             scanf(" %[^\n]s",b[i].name);
+            printf("Enter your mobile no.   : ");
+            scanf("%d", &b[i].phone);
             printf("Enter your blood group  : ");
-            scanf(" %[^\n]s",b[i].bg);
+            scanf(" %s",b[i].bg);
             printf("Enter your sex\t\t: ");
-            scanf(" %[^\n]s",b[i].sex);
+            scanf(" %s",b[i].sex);
             printf("Enter your address\t: ");
-            scanf(" %[^\n]s",b[i].add);
+            scanf(" %s",b[i].add);
             count++; //Increments the donor count in the array
         }
         fwrite(&b[i],sizeof(struct blood),1,fp);
@@ -165,19 +172,20 @@ void insert(struct blood *b, int n)
     fclose(fp);
     getchar();
     getchar();
-    system("cls");
 }
 
 //Donor Records
 void display(struct blood *b, int n)
 {
     FILE *fp = fopen("bloodrecords.txt", "r");
+    system("cls");
     printf("\nRecord of all donors:\n");
 	printf("---------------------------------------------\n");
     while(fread(&b[i],sizeof(struct blood),1,fp))
     {   
         printf("\nName: %s\n",b[i].name);
         printf("Age: %d\n", b[i].age);
+        printf("Mobile no.: %d\n", b[i].phone);
         printf("Blood group: %s\n", b[i].bg );
         printf("Weight: %d\n", b[i].weight);
         printf("Sex: %s\n",b[i].sex);
@@ -187,8 +195,7 @@ void display(struct blood *b, int n)
     fclose(fp);
     printf("\nPress ENTER to continue");
     getchar();
-    getchar();
-    return;    
+    getchar();  
 }
 
 //Search for specific blood type
@@ -197,6 +204,7 @@ void search_blood_type(struct blood *b, int n)
     char bg[10];
     int c=0;
     int found=0;
+    system("cls");
     FILE *fp = fopen("bloodrecords.txt", "r");
     printf("\nEnter Blood type: ");
     scanf(" %[^\n]s", bg);
@@ -206,28 +214,26 @@ void search_blood_type(struct blood *b, int n)
         if(strcmpi(b[i].bg,bg)==0) 
         {
         c=c+1;
-        }
 
-        if(strcmpi(b[i].bg,bg)==0) //=0 (string1 identical to string2)
-        {
-            printf("\nName: %s\n",b[i].name);
-            printf("Age: %d\n", b[i].age);
-            printf("Blood group: %s\n", b[i].bg );
-            printf("Weight: %d\n", b[i].weight);
-            printf("Sex: %s\n",b[i].sex);
-            printf("Address: %s\n",b[i].add);
-            printf("\n");
-            found=1; //Desired blood type blood found
+        printf("\nName: %s\n",b[i].name);
+        printf("Age: %d\n", b[i].age);
+        printf("Mobile no.: %d\n", b[i].phone);
+        printf("Blood group: %s\n", b[i].bg );
+        printf("Weight: %d\n", b[i].weight);
+        printf("Sex: %s\n",b[i].sex);
+        printf("Address: %s\n",b[i].add);
+        printf("\n");
+        found=1; 
         }
     }
-        printf("\nTotal number of blood type: %d\n",c);
-        if(found==0) //Desired blood type blood was not found
-        {
-            printf("\n\aRECORD DOES NOT EXIST.\n");
-        }
-        fclose(fp);
-        getchar();
-        getchar();           
+    printf("\nTotal number of blood type: %d\n",c);
+    if(found==0) 
+    {
+        printf("\n\aRECORD DOES NOT EXIST.\n");
+    }
+    fclose(fp);
+    getchar();
+    getchar();           
 }
 
 //Search by name
@@ -235,6 +241,7 @@ void search_name(struct blood *b, int n)
 {
     char name[50];
     int found=0;
+    system("cls");
     FILE *fp = fopen("bloodrecords.txt", "r");
     printf("\nEnter Name: ");
     scanf(" %[^\n]s", name);
@@ -245,6 +252,7 @@ void search_name(struct blood *b, int n)
         {
             printf("\nName: %s\n",b[i].name);
             printf("Age: %d\n", b[i].age);
+            printf("Mobile no.: %d\n", b[i].phone);
             printf("Blood group: %s\n", b[i].bg );
             printf("Weight: %d\n", b[i].weight);
             printf("Sex: %s\n",b[i].sex);
@@ -267,6 +275,7 @@ void search_sex(struct blood *b, int n)
 {
     char sex[10];
     int found=0;
+    system("cls");
     FILE *fp = fopen("bloodrecords.txt", "r");
     printf("\nEnter Sex: ");
     fflush(stdin);
@@ -278,6 +287,7 @@ void search_sex(struct blood *b, int n)
         {
             printf("\nName: %s\n",b[i].name);
             printf("Age: %d\n", b[i].age);
+            printf("Mobile no.: %d\n", b[i].phone);
             printf("Blood group: %s\n", b[i].bg );
             printf("Weight: %d\n", b[i].weight);
             printf("Sex: %s\n",b[i].sex);
@@ -294,6 +304,77 @@ void search_sex(struct blood *b, int n)
         getchar();
         getchar();   
 }
+
+//Delete a record
+void delete(struct blood *b,int n)
+{
+    char name[50];
+    int phone;
+    int found=0;
+    int c=0;
+    system("cls");
+    FILE *fp = fopen("bloodrecords.txt", "r");
+    FILE *fp1 = fopen("temp.txt", "w");
+    printf("\nEnter Name: ");
+    scanf("%s", name);
+    printf("---------------------------------------------\n");
+    while(fread(&b[i],sizeof(struct blood),1,fp))
+    {
+        if(strcmpi(b[i].name,name)==0) 
+        {
+            c=c+1;
+            printf("\nName: %s\n",b[i].name);
+            printf("Age: %d\n", b[i].age);
+            printf("Mobile no.: %d\n", b[i].phone);
+            printf("Blood group: %s\n", b[i].bg );
+            printf("Weight: %d\n", b[i].weight);
+            printf("Sex: %s\n",b[i].sex);
+            printf("Address: %s\n",b[i].add);
+            printf("\n");
+            if (c==1)
+            {      
+                found=1; 
+            }
+            else if(c>1)
+            {       
+                printf("\nThere are more than one occurences of this name in the records\n");                    
+                printf("\nPlease enter the mobile number of the donor: ");
+                scanf("%d", &phone);        
+                if (b[i].phone == phone)
+                {
+                    found=1;
+                }                   
+            }
+        }     
+        else
+        fwrite(&b[i],sizeof(struct blood),1,fp1);
+    }
+
+    fclose(fp);
+    fclose(fp1);
+
+    if (found==1)
+    {
+        fp1 = fopen("temp.txt", "r");
+        fp = fopen("bloodrecords.txt", "w");
+        
+        while(fread(&b[i],sizeof(struct blood),1,fp1))
+        {
+            fwrite(&b[i],sizeof(struct blood),1,fp);
+        }
+        fclose(fp);
+        fclose(fp1);
+    }
+    else
+    {
+        printf("\n\aRECORD DOES NOT EXIST.\n");
+    }
+    printf("RECORD SUCCESSFULLY DELETED");
+    
+    getchar();
+    getchar();   
+}
+
 void clr_file()
 {
     FILE *fp = fopen("bloodrecords.txt", "w");
